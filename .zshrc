@@ -1,4 +1,3 @@
-tmux
 fastfetch
 
 # Path to your Oh My Zsh installation.
@@ -18,6 +17,9 @@ eval "$(starship init zsh)"
 alias zshcfg="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias swaycfg="nvim ~/.config/sway/config"
+alias nvimcfg="nvim ~/.config/nvim"
+alias gttycfg="nvim ~/.config/ghostty/config"
+alias srczsh="source ~/.zshrc"
 
 # bun completions
 [ -s "/home/andy/.bun/_bun" ] && source "/home/andy/.bun/_bun"

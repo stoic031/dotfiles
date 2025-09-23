@@ -45,6 +45,9 @@ output * bg /usr/share/backgrounds/sway/porsche-911-turbo-3840x2160-13654.png fi
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+    
+    bindsym $mod+p exec exec grim - | wl-copy && notify-send "Screenshot" "Full screen captured to clipboard"
+    bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot" "Selected area captured to clipboard"
 #
 # Moving around:
 #
@@ -135,28 +138,31 @@ output * bg /usr/share/backgrounds/sway/porsche-911-turbo-3840x2160-13654.png fi
     bindsym $mod+minus scratchpad show
 #
 # Resizing containers:
+bindsym $mod+Ctrl+$left resize grow width 20px
+bindsym $mod+Ctrl+$right resize shrink width 20px
+bindsym $mod+Ctrl+$up resize grow height 20px
+bindsym $mod+Ctrl+$down resize shrink height 20px
+# mode "resize" {
+#     # left will shrink the containers width
+#     # right will grow the containers width
+#     # up will shrink the containers height
+#     # down will grow the containers height
+#     bindsym $left resize shrink width 10px
+#     bindsym $down resize grow height 10px
+#     bindsym $up resize shrink height 10px
+#     bindsym $right resize grow width 10px
 #
-mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
-
-    # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
-
-    # Return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-bindsym $mod+r mode "resize"
+#     # Ditto, with arrow keys
+#     bindsym Left resize shrink width 10px
+#     bindsym Down resize grow height 10px
+#     bindsym Up resize shrink height 10px
+#     bindsym Right resize grow width 10px
+#
+#     # Return to default mode
+#     bindsym Return mode "default"
+#     bindsym Escape mode "default"
+# }
+# bindsym $mod+r mode "resize"
 #
 # Utilities:
 #
@@ -182,11 +188,11 @@ gaps outer 5
 default_border none
 default_floating_border none
 
-for_window [app_id=com.mitchellh.ghostty] {
-	blur enable
-	blur_radius 8
-	opacity 0.8
-
-	corner_radius 12
-}
+# for_window [app_id=com.mitchellh.ghostty] {
+# 	blur enable
+# 	blur_radius 8
+# 	opacity 0.4
+#
+# 	corner_radius 12
+# }
 include /etc/sway/config.d/*
