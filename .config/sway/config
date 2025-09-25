@@ -19,7 +19,7 @@ set $file thunar
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/porsche-911-turbo-3840x2160-13654.png fill
+output * bg /usr/share/backgrounds/sway/moonlight-window-3840x2160-22169.png fill
 ### Input configuration
 
 ### Key bindings
