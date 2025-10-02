@@ -1,8 +1,14 @@
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec systemctl --user start xdg-desktop-portal-wlr
 
+exec export GTK_IM_MODULE=fcitx
+exec export QT_IM_MODULE=fcitx
+exec export XMODIFIERS=fcitx
+
+xwayland enable
+
 # Read `man 5 sway` for a complete reference.
-exec --no-startup-id fcitx5 -d
+exec fcitx5 -d
 font pango: SourceCodePro Medium 16
 ### Variables
 #
@@ -19,9 +25,24 @@ set $file thunar
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/moonlight-window-3840x2160-22169.png fill
+# output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1136x640_Portrait.png fill
+output * bg /home/andy/.local/share/backgrounds/sway/goku-ultra-instinct-3840x2160-21414.png fill
 ### Input configuration
-
+input "type:touchpad" {
+    tap enabled                
+    tap_button_map lrm         
+    dwt enabled                    
+    dwtp enabled                   
+    natural_scroll enabled     
+    scroll_method two_finger   
+    accel_profile adaptive     
+    pointer_accel 0.4
+    middle_emulation enabled   
+}
+bindgesture swipe:right workspace prev
+bindgesture swipe:left workspace next
+bindsym $mod+p workspace prev
+bindsym $mod+n workspace next
 ### Key bindings
 #
 # Basics:
@@ -46,7 +67,7 @@ output * bg /usr/share/backgrounds/sway/moonlight-window-3840x2160-22169.png fil
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
     
-    bindsym $mod+p exec exec grim - | wl-copy && notify-send "Screenshot" "Full screen captured to clipboard"
+    bindsym $mod+Shift+p exec exec grim - | wl-copy && notify-send "Screenshot" "Full screen captured to clipboard"
     bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot" "Selected area captured to clipboard"
 #
 # Moving around:
@@ -142,44 +163,17 @@ bindsym $mod+Ctrl+$left resize grow width 20px
 bindsym $mod+Ctrl+$right resize shrink width 20px
 bindsym $mod+Ctrl+$up resize grow height 20px
 bindsym $mod+Ctrl+$down resize shrink height 20px
-# mode "resize" {
-#     # left will shrink the containers width
-#     # right will grow the containers width
-#     # up will shrink the containers height
-#     # down will grow the containers height
-#     bindsym $left resize shrink width 10px
-#     bindsym $down resize grow height 10px
-#     bindsym $up resize shrink height 10px
-#     bindsym $right resize grow width 10px
-#
-#     # Ditto, with arrow keys
-#     bindsym Left resize shrink width 10px
-#     bindsym Down resize grow height 10px
-#     bindsym Up resize shrink height 10px
-#     bindsym Right resize grow width 10px
-#
-#     # Return to default mode
-#     bindsym Return mode "default"
-#     bindsym Escape mode "default"
-# }
-# bindsym $mod+r mode "resize"
-#
-# Utilities:
-#
-    # Special keys to adjust volume via PulseAudio
-    bindsym --locked XF86AudioMute exec pactl set-sink-mute \@DEFAULT_SINK@ toggle
-    bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume \@DEFAULT_SINK@ -5%
-    bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume \@DEFAULT_SINK@ +5%
-    bindsym --locked XF86AudioMicMute exec pactl set-source-mute \@DEFAULT_SOURCE@ toggle
-    # Special keys to adjust brightness via brightnessctl
-    bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
-    bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
-    # Special key to take a screenshot with grim
-    bindsym Print exec grim
+
+bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+
+for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="Thunar"] floating enable, resize set 1024 768
 
 
-output eDP-1 position 0,0
-output HDMI-A-1 position 1920,0
+output eDP-1 mode 1920x1080@60Hz position 0,0
+output HDMI-A-1 mode 1920x1080@100Hz position 1920,0
 focus output HDMI-A-1
 
 gaps inner 5
@@ -188,11 +182,5 @@ gaps outer 5
 default_border none
 default_floating_border none
 
-# for_window [app_id=com.mitchellh.ghostty] {
-# 	blur enable
-# 	blur_radius 8
-# 	opacity 0.4
-#
-# 	corner_radius 12
-# }
+
 include /etc/sway/config.d/*
