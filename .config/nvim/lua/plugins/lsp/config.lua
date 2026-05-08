@@ -126,9 +126,6 @@ return {
       require("lazyvim.plugins.lsp.keymaps").on_attach(client, buffer)
     end)
 
-    LazyVim.lsp.setup()
-    LazyVim.lsp.on_dynamic_capability(require("lazyvim.plugins.lsp.keymaps").on_attach)
-
     -- inlay hints
     if opts.inlay_hints.enabled then
       LazyVim.lsp.on_supports_method("textDocument/inlayHint", function(client, buffer)
