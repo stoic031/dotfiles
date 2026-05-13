@@ -1,11 +1,10 @@
-configWatcher = hs.pathwathcher.new(
-	os.getenv("HOME") .. "/.config/hammerspoon",
-	funtion(files)
-		hs.timer.doAfter(0.5, funtion()
+configWatcher = hs.pathwatcher
+	.new(os.getenv("HOME") .. "/.config/hammerspoon", function(files)
+		hs.timer.doAfter(0.5, function()
 			hs.reload()
+		end)
 	end)
-end
-):start()
+	:start()
 hs.alert.show("Config loaded")
 
 local log = hs.logger.new("input", "info")
