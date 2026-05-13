@@ -28,7 +28,7 @@ local function applyInputRule(appName)
 	end
 end
 
-local appWatcher = hs.application.watcher.new(function(appName, eventType, appObject)
+appWatcher = hs.application.watcher.new(function(appName, eventType, appObject)
 	if eventType == hs.application.watcher.activated then
 		applyInputRule(appName)
 	end
