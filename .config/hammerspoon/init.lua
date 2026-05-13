@@ -1,3 +1,13 @@
+configWatcher = hs.pathwathcher.new(
+	os.getenv("HOME") .. "/.config/hammerspoon",
+	funtion(files)
+		hs.timer.doAfter(0.5, funtion()
+			hs.reload()
+	end)
+end
+):start()
+hs.alert.show("Config loaded")
+
 local log = hs.logger.new("input", "info")
 local inputSources = {
 	en = "com.apple.keylayout.ABC",
