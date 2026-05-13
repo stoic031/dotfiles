@@ -16,6 +16,8 @@ return {
   { import = "plugins.lualine" },
   { import = "plugins.tmux-navigator" },
   { import = "plugins.transparent" },
+  { import = "plugins.snacks" },
+  { import = "plugins.auto-save" },
 
   -- add jsonls and schemastore packages, and setup treesitter for json, json5 and jsonc
   { import = "lazyvim.plugins.extras.lang.json" },
