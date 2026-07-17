@@ -1,17 +1,14 @@
 # 🚀 Dotfiles
 
-My personal dotfiles for Arch Linux (Wayland + Sway) development environment.
+My personal dotfiles for **macOS** development environment.
 
 ## 📦 What's Inside
 
-### Window Manager & Compositor
-- **Sway** - Tiling Wayland compositor with custom keybindings
-- **Wofi** - Application launcher with custom styling
-- **Ghostty** - Modern, GPU-accelerated terminal emulator
-  - Font: JetBrainsMono Nerd Font
-  - Theme: Catppuccin Frappe with transparency
+This repository is organized into two main sections:
 
-### Development Tools
+### `common/` - Cross-platform configs
+Configurations that work across different systems:
+
 - **Neovim** - LazyVim configuration with custom plugins
   - LSP: Full language server support via Mason
   - Completion: blink.cmp with friendly-snippets
@@ -20,34 +17,41 @@ My personal dotfiles for Arch Linux (Wayland + Sway) development environment.
   - Treesitter: Syntax highlighting for multiple languages
   - Tmux integration: Seamless navigation between vim and tmux panes
 
-- **Tmux** - Terminal multiplexer with custom configuration
-  - Theme: Catppuccin Mocha
-  - Prefix: `Ctrl+a`
-  - Status bar: Weather, battery, CPU/RAM usage
-  - Vim-tmux-navigator for seamless pane switching
+- **Starship** - Fast, customizable cross-shell prompt
+  - Custom prompt format with user, hostname, directory
+  - Shows sudo status, package versions, and more
 
-### Shell & CLI
-- **Zsh** - Shell with Oh My Zsh
-- **Starship** - Fast, customizable prompt
-- **Fastfetch** - System information display
+### `macos/` - macOS-specific configs
+Configurations tailored for macOS:
+
+- **Hammerspoon** - Powerful automation tool for macOS
+  - Auto-reload on config changes
+  - Input source switching (English, Vietnamese Telex, Japanese)
+  - App-specific input rules (Ghostty → EN, Brave → VN, Xcode → EN)
 
 ## 🎨 Theme
 
 **Catppuccin** color scheme throughout:
-- Ghostty: Frappe variant
 - Neovim: Main theme
-- Tmux: Mocha variant
+- Starship: Custom styled prompt
 - Consistent visual experience across all tools
 
 ## ⚙️ Installation
 
 ### Prerequisites
-```bash
-# Install required packages (Arch Linux)
-sudo pacman -S sway wofi ghostty neovim tmux zsh git stow
 
-# Optional but recommended
-sudo pacman -S starship fastfetch fzf ripgrep fd grim slurp wl-clipboard
+```bash
+# Install Homebrew if not already installed
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install required packages
+brew install neovim tmux zsh git stow starship
+
+# Install Ghostty terminal (optional but recommended)
+brew install --cask ghostty
+
+# Install Hammerspoon for macOS automation
+brew install --cask hammerspoon
 ```
 
 ### Using GNU Stow
@@ -59,12 +63,16 @@ This repository is designed to be managed with GNU Stow:
 git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
-# Stow all configs
-stow .
+# Stow common configs (applies to all systems)
+stow common
 
-# Or stow specific configs
-stow --target=$HOME/.config/nvim .config/nvim
-stow --target=$HOME/.config/sway .config/sway
+# Stow macOS-specific configs
+stow macos
+
+# Or stow specific configs individually
+stow --target=$HOME/.config/nvim common/.config/nvim
+stow --target=$HOME/.config/starship.toml common/.config/starship.toml
+stow --target=$HOME/.hammerspoon macos/hammerspoon
 ```
 
 ### Manual Installation
@@ -76,10 +84,11 @@ If you prefer manual installation:
 git clone https://github.com/yourusername/dotfiles.git
 cd dotfiles
 
-# Copy configs to appropriate locations
-cp -r .config/* ~/.config/
-cp .tmux.conf ~/
-cp .zshrc ~/
+# Copy common configs
+cp -r common/.config/* ~/.config/
+
+# Copy macOS-specific configs
+cp -r macos/hammerspoon ~/.hammerspoon
 ```
 
 ### Post-Installation
@@ -96,28 +105,28 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 nvim
 ```
 
-3. **Oh My Zsh:**
+3. **Hammerspoon:**
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# Open Hammerspoon app
+# Grant necessary permissions in System Preferences > Security & Privacy
+# The config will auto-reload when you make changes
+```
 
-# Install zsh plugins
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+4. **Starship:**
+```bash
+# Add to your ~/.zshrc or ~/.bashrc
+eval "$(starship init zsh)"
 ```
 
 ## 🔧 Configuration Highlights
 
-### Sway Keybindings
+### Hammerspoon Features
 
-| Key | Action |
-|-----|--------|
-| `Mod+Return` | Launch terminal |
-| `Mod+d` | Launch Wofi |
-| `Mod+e` | Launch file manager (Thunar) |
-| `Mod+h/j/k/l` | Navigate windows (vim-style) |
-| `Mod+Shift+p` | Screenshot (full screen) |
-| `Mod+Shift+s` | Screenshot (selection) |
-| `Mod+p/n` | Previous/next workspace |
+| Feature | Description |
+|---------|-------------|
+| Auto-reload | Automatically reloads config on file changes |
+| Input Switching | Switch between EN, VN (Telex), and JP input sources |
+| App-specific Rules | Different input sources for different apps |
 
 ### Tmux Keybindings
 
@@ -141,12 +150,9 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.
 
 ## 📝 Customization
 
-### Changing Theme Colors
+### Changing Neovim Theme
 
-Edit the theme in respective config files:
-- Ghostty: `.config/ghostty/config`
-- Neovim: `.config/nvim/lua/plugins/init.lua`
-- Tmux: `.tmux.conf` (look for `@catppuccin_flavor`)
+Edit `.config/nvim/lua/plugins/init.lua` or create custom theme files in `lua/plugins/`.
 
 ### Adding Neovim Plugins
 
@@ -160,9 +166,21 @@ return {
 }
 ```
 
-## 🖼️ Screenshots
+### Customizing Hammerspoon Input Rules
 
-*Add your screenshots here*
+Edit `macos/hammerspoon/init.lua`:
+```lua
+local appRules = {
+    ["Ghostty"] = inputSources.en,
+    ["Xcode"] = inputSources.en,
+    ["Brave Browser"] = inputSources.vn,
+    -- Add your own rules here
+}
+```
+
+### Customizing Starship Prompt
+
+Edit `common/.config/starship.toml` to change prompt appearance.
 
 ## 📄 License
 
@@ -172,9 +190,10 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](.confi
 
 - [LazyVim](https://github.com/LazyVim/LazyVim)
 - [Catppuccin](https://github.com/catppuccin/catppuccin)
-- [Sway](https://swaywm.org/)
+- [Hammerspoon](https://www.hammerspoon.org/)
+- [Starship](https://starship.rs/)
 - All the amazing open-source projects that make this setup possible
 
 ---
 
-**Note:** This configuration is optimized for my personal workflow. Feel free to fork and customize to your needs!
+**Note:** This configuration is optimized for my personal workflow on macOS. Feel free to fork and customize to your needs!
